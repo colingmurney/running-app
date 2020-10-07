@@ -10,7 +10,6 @@ function getActivities(client_id, client_secret, refresh_token) {
       refresh_token: refresh_token,
     },
   }).then((response) => {
-    console.log(response.data);
     return response.data;
   });
 }

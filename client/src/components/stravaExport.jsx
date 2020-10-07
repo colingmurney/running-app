@@ -11,25 +11,31 @@ class StravaExport extends Component {
     activities: [],
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const authCode = params.get("code");
 
-    getRefreshToken(this.state.client_id, this.state.client_secret, authCode)
-      .then((response) => {
-        console.log(response);
-        getActivities(this.state.client_id, this.state.client_secret, response);
-      })
-      .then((response) => {
-        console.log(response);
-        //this.setState({ activities: [response] });
-      })
-      .catch((error) => console.log(error));
+    try {
+      const refresh_token = await getRefreshToken(
+        this.state.client_id,
+        this.state.client_secret,
+        authCode
+      );
+      const activities = await getActivities(
+        this.state.client_id,
+        this.state.client_secret,
+        refresh_token
+      );
+      this.setState({ activities });
+      console.log(this.state.activities);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
-    return <div>{this.state.activities}</div>;
+    return <div></div>;
   }
 }
 
