@@ -12,7 +12,7 @@ class OtherOptions extends Component {
           <p>
             <a
               className="btn btn-secondary"
-              href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/strava/exchange_token&approval_prompt=force&scope=read"
+              href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/strava/exchange_token&approval_prompt=force&scope=activity:read_all"
               role="button"
             >
               Strava data&raquo;
