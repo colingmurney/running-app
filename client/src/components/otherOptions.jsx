@@ -10,9 +10,13 @@ class OtherOptions extends Component {
           <h2>STRAVA EXPORT</h2>
           <p>Export your Strava activities data by csv. </p>
           <p>
-            <Link className="btn btn-secondary" to="/strava" role="button">
+            <a
+              className="btn btn-secondary"
+              href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/strava/exchange_token&approval_prompt=force&scope=read"
+              role="button"
+            >
               Strava data&raquo;
-            </Link>
+            </a>
           </p>
         </div>
         <div className="col-md-4">
