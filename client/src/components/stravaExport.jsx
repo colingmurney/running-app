@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import getRefreshToken from "../utils/getRefreshToken";
 import getActivities from "../utils/getActivities";
+import Table from "./table";
+import DownloadButton from "./downloadButton";
 
 class StravaExport extends Component {
   state = {
     client_id: "47805",
     client_secret: "aeb849953d794088bb82fbce08b6e12588fa7725",
-    authCode: "",
-    refresh_token: "",
-    activities: [],
+    activities: JSON.parse(sessionStorage.getItem("stravaActivities")) || [],
   };
 
   async componentDidMount() {
@@ -27,15 +27,20 @@ class StravaExport extends Component {
         this.state.client_secret,
         refresh_token
       );
+      sessionStorage.setItem("stravaActivities", JSON.stringify(activities));
       this.setState({ activities });
-      console.log(this.state.activities);
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-    return <div></div>;
+    return (
+      <div>
+        <DownloadButton activities={this.state.activities} />
+        <Table activities={this.state.activities} />;
+      </div>
+    );
   }
 }
 
