@@ -38,7 +38,7 @@ class StravaExport extends Component {
     return (
       <div>
         <DownloadButton activities={this.state.activities} />
-        <Table activities={this.state.activities} />;
+        <Table activities={this.state.activities} />
       </div>
     );
   }
