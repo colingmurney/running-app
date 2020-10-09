@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import getNike from "../utils/getNike";
-import formatNike from "../utils/formatNike";
 import Table from "./table";
 import DownloadButton from "./downloadButton";
 import NikeForm from "./nikeForm";
+import handleNikeForm from "../utils/handleNikeForm"
 
 class NikeExport extends Component {
   constructor(props){
@@ -17,18 +16,9 @@ class NikeExport extends Component {
   }
   
   handleSubmit = async (token) => {
-    try {
-      let activities = await getNike(token);
-      console.log(activities); //will be undefined if token is incorrect
-      
-      //reformat data before setting the state
-      activities = formatNike(activities);
-      sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
-      this.setState({ activities });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    const activities = await handleNikeForm(token)
+    this.setState({activities})
+  }
 
   render() {
     return (
