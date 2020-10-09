@@ -20,8 +20,8 @@ class Table extends Component {
         </thead>
         <tbody>
           {this.props.activities.map((activity) => (
-            <tr key={activity.id}>
-              <td>{activity.id}</td>
+            <tr key={activity.external_id}>
+              <td>{activity.external_id}</td>
               <td>{activity.name}</td>
               <td>{activity.type}</td>
               <td>{activity.start_date_local}</td>

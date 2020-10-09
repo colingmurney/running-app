@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import getNike from "../utils/getNike";
+import formatNike from "../utils/formatNike";
+import Table from "./table";
 
 class NikeExport extends Component {
   state = {
@@ -12,17 +14,18 @@ class NikeExport extends Component {
     const token = this.token.value.trim();
 
     try {
-      const activities = await getNike(token);
-      console.log(activities);
+      let activities = await getNike(token);
+      console.log(activities); //will be undefined if token is incorrect
+      //reformat data before setting the state
+      activities = formatNike(activities);
       sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
-      this.setState({ activities, token });
+      this.setState({ activities });
     } catch (err) {
       console.log(err);
     }
   };
 
   render() {
-    console.log(this.state.token);
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -40,7 +43,12 @@ class NikeExport extends Component {
             Get activities
           </button>
         </form>
-        <p>The token is {this.state.token}</p>
+        <p>
+          <a href="https://yasoob.me/posts/nike-run-club-data-visualization/">
+            Instructions for retreiving token
+          </a>
+        </p>
+        <Table activities={this.state.activities} />
       </div>
     );
   }
