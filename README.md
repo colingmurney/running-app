@@ -15,3 +15,5 @@ Display message when Nike Token isn't valid
 Client (JOI) authentication
 
 Make the download buttons funcitonal (start with JSON than try CSV format)
+
+Change the format of that the weather appears in description for Nike imports in formatNike.js (Ex: partly_sunny -> Partly sunny)

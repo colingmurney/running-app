@@ -21,11 +21,13 @@ class NikeExport extends Component {
   }
 
   render() {
+    const {activities} = this.state
     return (
       <div>
         <NikeForm handleSubmit={this.handleSubmit}/>
         <DownloadButton />
-        <Table activities={this.state.activities} />
+        {activities && !!activities.length &&
+        <Table activities={activities} />}
       </div>
     );
   }

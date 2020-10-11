@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function getRefreshToken(client_id, client_secret, authCode) {
+async function getRefreshToken(client_id, client_secret, authCode) {
   return axios({
     method: "post",
     url: "https://www.strava.com/oauth/token",

@@ -1,9 +1,7 @@
 import StravaTemplate from "./stravaTemplate";
+import capitalizeFirstLetter from "./capitalizeFirstLetter"
 
 function searchSummaries(summaries, metric) {
-  //   summaries.forEach((summary) => {
-  //     if (summary["metric"] === metric) return summary["value"];
-  //   });
   for (const summary of summaries) {
     if (summary.metric === metric) return summary.value;
   }
@@ -18,8 +16,8 @@ function formatNike(nikeActivities) {
 
     let id = activity.id;
     let name = activity.tags["com.nike.name"];
-    let type = activity.type;
-    let moving_time = parseInt(activity.active_duration_ms) / 1000;
+    let type = capitalizeFirstLetter(activity.type);
+    let moving_time = Math.round(parseInt(activity.active_duration_ms) / 1000);
     let date = new Date(parseInt(activity.start_epoch_ms));
     let start_date_local =
       date.getUTCFullYear() +
@@ -27,11 +25,9 @@ function formatNike(nikeActivities) {
       (date.getUTCMonth() + 1) +
       "-" +
       date.getUTCDate();
-    let description = null;
-    let distance = searchSummaries(summaries, "distance");
-    let trainer = 0;
-    let commute = 0;
-    let total_elevation_gain = searchSummaries(summaries, "ascent");
+    let description = `${activity.tags["com.nike.temperature"]} degrees. ${activity.tags["com.nike.weather"]}. Imported from Nike Run Club`;
+    let distance = Math.round(searchSummaries(summaries, "distance") * 1000);
+    let total_elevation_gain = Math.round(searchSummaries(summaries, "ascent"));
     let average_heartrate = null;
 
     //create new instance of strava template
@@ -43,8 +39,6 @@ function formatNike(nikeActivities) {
       start_date_local,
       description,
       distance,
-      trainer,
-      commute,
       total_elevation_gain,
       average_heartrate
     );

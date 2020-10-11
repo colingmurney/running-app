@@ -43,49 +43,6 @@ router.post("/getActivities", jsonParser, async (req, res) => {
     .then((activities) => res.send(activities));
 });
 
-// async function getActivities2(access_token, client_id, client_secret) {
-//   try {
-//     const payload = await strava.athlete.listActivities({
-//       access_token: access_token,
-//       client_id: client_id,
-//       client_secret: client_secret,
-//       redirect_uri: "localhost",
-//     });
-//     return payload;
-//   } catch (error) {
-//     return error;
-//   }
-// }
-
-// router.post("/getActivities2", jsonParser, (req, res) => {
-//   const data = {
-//     client_id: req.body.client_id,
-//     client_secret: req.body.client_secret,
-//     refresh_token: req.body.refresh_token,
-//     grant_type: "refresh_token",
-//   };
-
-//   fetch("https://www.strava.com/oauth/token", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(data),
-//   })
-//     .then((response) => response.json())
-//     .then((data) =>
-//       getActivities(
-//         data.access_token,
-//         req.body.client_id,
-//         req.body.client_secret
-//       )
-//     )
-//     .then((data) => res.send(data))
-//     .catch((error) => {
-//       res.send(error);
-//     });
-// });
-
 function createActivity(
   name,
   type,
@@ -93,8 +50,6 @@ function createActivity(
   elapsed_time,
   description,
   distance,
-  trainer,
-  commute,
   access_token
 ) {
   const data = {
@@ -104,8 +59,6 @@ function createActivity(
     elapsed_time: elapsed_time,
     description: description,
     distance: distance,
-    trainer: trainer,
-    commute: commute,
     access_token: access_token,
   };
 
@@ -133,9 +86,7 @@ router.post("/createActivity", jsonParser, (req, res) => {
         req.body.start_date_local,
         req.body.elapsed_time,
         req.body.description,
-        req.body.disatnce,
-        req.body.trainer,
-        req.body.commute,
+        req.body.distance,
         result.access_token
       )
     )

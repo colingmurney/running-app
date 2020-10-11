@@ -9,8 +9,6 @@ class StravaTemplate {
     start_date_local,
     description,
     distance,
-    trainer,
-    commute,
     total_elevation_gain,
     average_heartrate
   ) {
@@ -21,8 +19,6 @@ class StravaTemplate {
     this.start_date_local = start_date_local;
     this.description = description;
     this.distance = distance;
-    this.trainer = trainer;
-    this.commute = commute;
     this.total_elevation_gain = total_elevation_gain;
     this.average_heartrate = average_heartrate;
   }
