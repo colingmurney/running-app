@@ -10,7 +10,8 @@ class StravaTemplate {
     description,
     distance,
     total_elevation_gain,
-    average_heartrate
+    average_heartrate,
+    isSelected
   ) {
     this.external_id = external_id;
     this.name = name;
@@ -21,6 +22,7 @@ class StravaTemplate {
     this.distance = distance;
     this.total_elevation_gain = total_elevation_gain;
     this.average_heartrate = average_heartrate;
+    this.isSelected = isSelected;
   }
 }
 export default StravaTemplate;

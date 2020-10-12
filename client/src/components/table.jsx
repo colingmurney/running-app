@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 
+
 class Table extends Component {
   state = {};
+
+  onSelect = (e) => {
+    const index = e.target.id
+    this.props.handleSelect(index)
+  }
 
   render() {
     return (
@@ -16,11 +22,13 @@ class Table extends Component {
             <th scope="col">Time</th>
             <th scope="col">Elevation</th>
             <th scope="col">Heartrate</th>
+            <th scope="col"></th>
           </tr>
         </thead>
-        <tbody>
-          {this.props.activities.map((activity) => (
-            <tr key={activity.external_id}>
+        <tbody onClick={this.onSelect}>
+          {this.props.activities.map((activity, index) => (
+            
+            <tr key={activity.external_id} >
               <td>{activity.external_id}</td>
               <td>{activity.name}</td>
               <td>{activity.type}</td>
@@ -29,6 +37,7 @@ class Table extends Component {
               <td>{activity.moving_time}</td>
               <td>{activity.total_elevation_gain}</td>
               <td>{activity.average_heartrate}</td>
+          <td id={index}>{activity.isSelected ? "Unselect" : "Select"}</td>
             </tr>
           ))}
         </tbody>

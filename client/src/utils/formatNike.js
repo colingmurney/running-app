@@ -29,6 +29,7 @@ function formatNike(nikeActivities) {
     let distance = Math.round(searchSummaries(summaries, "distance") * 1000);
     let total_elevation_gain = Math.round(searchSummaries(summaries, "ascent"));
     let average_heartrate = null;
+    let isSelected = false;
 
     //create new instance of strava template
     let nikeObj = new StravaTemplate(
@@ -40,7 +41,8 @@ function formatNike(nikeActivities) {
       description,
       distance,
       total_elevation_gain,
-      average_heartrate
+      average_heartrate,
+      isSelected
     );
     //append template to formatted nike array
     formattedNike.push(nikeObj);
