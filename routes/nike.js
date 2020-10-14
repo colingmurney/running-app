@@ -1,22 +1,34 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const router = express.Router();
+const formatNike = require("../utils/formatNike")
 const jsonParser = bodyParser.json();
-const request = require("request");
 
-router.post("/getActivities", jsonParser, (req, res) => {
-  //Bearer will expire. Instuctions to manually retreive new one: https://yasoob.me/posts/nike-run-club-data-visualization/
-  var options = {
-    method: "GET",
+
+const axios = require("axios")
+
+function getActivities(token) {
+  return axios({
+    method: "get",
     url: "https://api.nike.com/sport/v3/me/activities/after_time/0",
     headers: {
-      Authorization: `Bearer ${req.body.bearer}`,
-    },
-  };
-  request(options, function (error, response) {
-    if (error) throw new Error(error);
-    res.send(response.body);
-  });
+      Authorization: `Bearer ${token}`
+    }
+  }).then((response) => {
+    return response.data.activities;
+  })
+}
+
+router.post("/getActivities", jsonParser, async (req, res) => {
+  try {
+    const activities = await getActivities(req.body.bearer);
+    const formattedNike = formatNike(activities);
+    res.send(formattedNike)
+  }
+  catch(error) {
+    res.send(error)
+  }
+
 });
 
 module.exports = router;

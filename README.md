@@ -4,12 +4,13 @@ Migrate Strava and NIke+ Run Club data
 
 # TO-DO
 
-Need to rethink where I am formatting Nike data.
-Instead of sending entire Nike activities to client, do the formatting on back end and only send formatted Nike data to client.
+Fix table. If anything besides select/unselcted is clicked, an error occurs.
 
 Have to figure out best way to take Nike activities and convert them to GPX, then make Strava requests with GPX files
 
 Figure out how to get more than 30 activities from Nike and Strava
+
+Add home button for each page
 
 Error and success messages on screen
 

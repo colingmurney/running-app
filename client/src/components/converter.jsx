@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import NikeForm from "./nikeForm";
-import handleNikeForm from "../utils/handleNikeForm"
+import getNike from "../utils/getNike"
 import createActivity from "../utils/createActivity"
 import getRefreshToken from "../utils/getRefreshToken"
 import Table from "./table";
+
 
 class Converter extends Component {
   state = {
@@ -39,7 +40,8 @@ class Converter extends Component {
   }
 
     handleSubmit = async (token) => {
-      const activities = await handleNikeForm(token)
+      const activities = await getNike(token)
+      sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
       this.setState({activities})
     }
 

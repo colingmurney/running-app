@@ -9,7 +9,8 @@ async function getNike(bearer) {
     },
   })
     .then((response) => {
-      return response.data.activities;
+      console.log(response.data)
+      return response.data;
     })
     .catch((error) => console.log(error));
 }

@@ -27,7 +27,7 @@ function formatNike(nikeActivities) {
       date.getUTCDate();
     let description = `${activity.tags["com.nike.temperature"]} degrees. ${activity.tags["com.nike.weather"]}. Imported from Nike Run Club`;
     let distance = Math.round(searchSummaries(summaries, "distance") * 1000);
-    let total_elevation_gain = Math.round(searchSummaries(summaries, "ascent"));
+    let total_elevation_gain = Math.round(searchSummaries(summaries, "ascent") || 0);
     let average_heartrate = null;
     let isSelected = false;
 
