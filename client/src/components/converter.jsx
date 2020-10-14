@@ -37,21 +37,31 @@ class Converter extends Component {
           authCode
         );
         
-        selectedIndex.map(indexOf => {
+      for (let i of selectedIndex) {
+            // console.log(activities[i].name)
+            // console.log(activities[i].type)
+            // console.log(activities[i].start_date_local)
+            // console.log(activities[i].moving_time)
+            // console.log(activities[i].description)
+            // console.log(activities[i].distance)
+        
           const activityCreated = await createActivity(
             client_id,
             client_secret,
             refresh_token,
-            activities[indexOf].name,
-            activities[indexOf].type,
-            activities[indexOf].start_date_local,
-            activities[indexOf].moving_time,
-            activities[indexOf].description,
-            activities[indexOf].distance
+            activities[i].name,
+            activities[i].type,
+            activities[i].start_date_local,
+            activities[i].moving_time,
+            activities[i].description,
+            activities[i].distance
           );
           console.log(activityCreated)
           
-        })
+          //unselect activities after conversion and empty selectedIndex
+          //unselect part may go in loop since I need to reset the isSelected prop for everything in selectedIndex
+          //const selectedIndex = []
+        }
         
         
       } catch (error) {
