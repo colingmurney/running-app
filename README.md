@@ -9,9 +9,6 @@ Instead of sending entire Nike activities to client, do the formatting on back e
 
 Have to figure out best way to take Nike activities and convert them to GPX, then make Strava requests with GPX files
 
-After each time convert is clicked, currently have to reauthorize since the auth token from url is for one time use.
-Can fix this by using auth token to get refresh on page load and store refresh in the state
-
 Figure out how to get more than 30 activities from Nike and Strava
 
 Error and success messages on screen

@@ -9,41 +9,48 @@ class Converter extends Component {
   state = {
     client_id: "47805",
     client_secret: "aeb849953d794088bb82fbce08b6e12588fa7725",
-    token: "",
+    refresh_token: sessionStorage.getItem("refresh_token") || "",
     activities: JSON.parse(sessionStorage.getItem("nikeActivities")) || [],
-    selectedIndex: []
+    selectedIndex: [],
   }
-    
+   
+  async componentDidMount(){
+    if (!this.state.refresh_token) {
+      const search = this.props.location.search;
+      const params = new URLSearchParams(search);
+      const authCode = params.get("code");
+
+      if (authCode) {
+        try {
+          const refresh_token = await getRefreshToken(
+            this.state.client_id,
+            this.state.client_secret,
+            authCode
+          )
+
+          sessionStorage.setItem("refresh_token", refresh_token)
+          this.setState({refresh_token})
+        } catch(error) {
+          console.log(error)
+        }
+      } 
+    }
+
+  }
+
     handleSubmit = async (token) => {
       const activities = await handleNikeForm(token)
       this.setState({activities})
     }
 
     handleConvert = async () => {
-      
-     //check if selectedIndex length is 0, is it is, return no runs selected
+      let {client_id, client_secret, activities, selectedIndex, refresh_token} = this.state
 
-      //get param from url
-      const search = this.props.location.search;
-      const params = new URLSearchParams(search);
-      const authCode = params.get("code");
-
-      const {client_id, client_secret, activities, selectedIndex} = this.state
+      if (!refresh_token) return console.log("No refresh token (Please give authorization)")
       
       try {
-        const refresh_token = await getRefreshToken(
-          client_id,
-          client_secret,
-          authCode
-        );
         
       for (let i of selectedIndex) {
-            // console.log(activities[i].name)
-            // console.log(activities[i].type)
-            // console.log(activities[i].start_date_local)
-            // console.log(activities[i].moving_time)
-            // console.log(activities[i].description)
-            // console.log(activities[i].distance)
         
           const activityCreated = await createActivity(
             client_id,
@@ -56,18 +63,20 @@ class Converter extends Component {
             activities[i].description,
             activities[i].distance
           );
+          delete activities[i]
           console.log(activityCreated)
           
-          //unselect activities after conversion and empty selectedIndex
-          //unselect part may go in loop since I need to reset the isSelected prop for everything in selectedIndex
-          //const selectedIndex = []
         }
-        
-        
+        //filter out runs just converted and reset selectedIndex
+        activities = activities.filter(function (el) {
+          return el != null;
+        });
+        selectedIndex = []
+
+        this.setState({activities, selectedIndex})
       } catch (error) {
         console.log(error);
       }
-    
     }
 
     handleSelect = (index) => {
@@ -81,22 +90,19 @@ class Converter extends Component {
       } else {
         selectedIndex.push(index)
       }
-
       this.setState({activities, selectedIndex})
-      
     }
 
   render() {
-    const {activities, isSelected} = this.state;
+    const {activities} = this.state;
 
-    console.log(this.state.selectedIndex)
     return (
       <div>
         <NikeForm handleSubmit={this.handleSubmit} />
         <button><a href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/converter/exchange_token&approval_prompt=force&scope=activity:write">authorize</a></button>
         <button onClick={this.handleConvert}>Convert</button>
         {activities && !!activities.length &&
-        <Table activities={activities} handleSelect={this.handleSelect} isSelected={isSelected}/>}
+        <Table activities={activities} handleSelect={this.handleSelect} />}
       </div>
     );
   }
