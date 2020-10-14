@@ -4,7 +4,11 @@ Migrate Strava and NIke+ Run Club data
 
 # TO-DO
 
-Fix table. If anything besides select/unselcted is clicked, an error occurs.
+Refactor handleSelect code into util function since it is used in 3 different places
+
+Make download functions
+
+App crashes if I click all over table too quickly
 
 Have to figure out best way to take Nike activities and convert them to GPX, then make Strava requests with GPX files
 

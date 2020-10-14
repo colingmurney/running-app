@@ -3,6 +3,7 @@ import Table from "./table";
 import DownloadButton from "./downloadButton";
 import NikeForm from "./nikeForm";
 import getNike from "../utils/getNike"
+import NavBar from "./navBar"
 
 class NikeExport extends Component {
   state = {
@@ -34,10 +35,13 @@ class NikeExport extends Component {
     const {activities} = this.state
     return (
       <div>
+        <NavBar title="Nike Export"/>
+        <div className="container">
         <NikeForm handleSubmit={this.handleSubmit}/>
         <DownloadButton />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect}/>}
+        </div>
       </div>
     );
   }

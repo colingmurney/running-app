@@ -10,7 +10,7 @@ import "./App.css";
 
 function App() {
   return (
-    <main className="container">
+    <main className="container-fluid">
       <Switch>
         <Route path="/converter" component={Converter} />
         <Route path="/strava" component={StravaExport} />

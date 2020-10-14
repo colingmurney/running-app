@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
 const jsonParser = bodyParser.json();
+const formatStrava = require("../utils/formatStrava")
 
 function getAccessToken(client_id, client_secret, refresh_token) {
   const data = {
@@ -34,13 +35,22 @@ function getActivities(access_token) {
 }
 
 router.post("/getActivities", jsonParser, async (req, res) => {
-  getAccessToken(
-    req.body.client_id,
-    req.body.client_secret,
-    req.body.refresh_token
-  )
-    .then((response) => getActivities(response.access_token))
-    .then((activities) => res.send(activities));
+  try {
+  const response = await getAccessToken(
+      req.body.client_id,
+      req.body.client_secret,
+      req.body.refresh_token
+    )
+  const activities = await getActivities(response.access_token)
+  
+  const formattedActivities = formatStrava(activities)
+
+  res.send(formattedActivities)
+  }
+  catch(error) {
+    res.send(error)
+  }
+  
 });
 
 function createActivity(

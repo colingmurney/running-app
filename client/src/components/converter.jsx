@@ -4,7 +4,7 @@ import getNike from "../utils/getNike"
 import createActivity from "../utils/createActivity"
 import getRefreshToken from "../utils/getRefreshToken"
 import Table from "./table";
-
+import NavBar from "./navBar";
 
 class Converter extends Component {
   state = {
@@ -100,11 +100,14 @@ class Converter extends Component {
 
     return (
       <div>
+        <NavBar title="Converter"/>
+        <div className="container">
         <NikeForm handleSubmit={this.handleSubmit} />
         <button><a href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/converter/exchange_token&approval_prompt=force&scope=activity:write">authorize</a></button>
         <button onClick={this.handleConvert}>Convert</button>
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} />}
+      </div>
       </div>
     );
   }

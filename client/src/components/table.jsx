@@ -21,23 +21,22 @@ class Table extends Component {
             <th scope="col">Distance</th>
             <th scope="col">Time</th>
             <th scope="col">Elevation</th>
-            <th scope="col">Heartrate</th>
+            {/* <th scope="col">Heartrate</th> */}
             <th scope="col"></th>
           </tr>
         </thead>
-        <tbody onClick={this.onSelect}>
+        <tbody className="clickable" onClick={this.onSelect}>
           {this.props.activities.map((activity, index) => (
-            
             <tr key={activity.external_id} >
-              <td>{activity.external_id}</td>
-              <td>{activity.name}</td>
-              <td>{activity.type}</td>
-              <td>{activity.start_date_local}</td>
-              <td>{activity.distance}</td>
-              <td>{activity.moving_time}</td>
-              <td>{activity.total_elevation_gain}</td>
-              <td>{activity.average_heartrate}</td>
-          <td id={index}>{activity.isSelected ? "Unselect" : "Select"}</td>
+              <td id={index}>{activity.external_id}</td>
+              <td id={index}>{activity.name}</td>
+              <td id={index}>{activity.type}</td>
+              <td id={index}>{activity.start_date_local}</td>
+              <td id={index}>{activity.distance}</td>
+              <td id={index}>{activity.moving_time}</td>
+              <td id={index}>{activity.total_elevation_gain}</td>
+              {/* <td id={index}>{activity.average_heartrate}</td> */}
+              <td id={index}><i className={activity.isSelected ? "fa fa-check" : ""} aria-hidden="true"></i></td>
             </tr>
           ))}
         </tbody>
