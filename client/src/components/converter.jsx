@@ -5,12 +5,14 @@ import createActivity from "../utils/createActivity"
 import getRefreshToken from "../utils/getRefreshToken"
 import Table from "./table";
 import NavBar from "./navBar";
+import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected"
+
 
 class Converter extends Component {
   state = {
     client_id: "47805",
     client_secret: "aeb849953d794088bb82fbce08b6e12588fa7725",
-    refresh_token: sessionStorage.getItem("refresh_token") || "",
+    refresh_token: sessionStorage.getItem("write_refresh_token") || "",
     activities: JSON.parse(sessionStorage.getItem("nikeActivities")) || [],
     selectedIndex: [],
   }
@@ -29,7 +31,7 @@ class Converter extends Component {
             authCode
           )
 
-          sessionStorage.setItem("refresh_token", refresh_token)
+          sessionStorage.setItem("write_refresh_token", refresh_token)
           this.setState({refresh_token})
         } catch(error) {
           console.log(error)
@@ -82,16 +84,8 @@ class Converter extends Component {
     }
 
     handleSelect = (index) => {
-      const activities = [...this.state.activities];
-      activities[index].isSelected = !activities[index].isSelected;
-      
-      const selectedIndex = [...this.state.selectedIndex];
-      if (selectedIndex.includes(index)) {
-        const indexInSelectedIndex = selectedIndex.indexOf(index)
-        selectedIndex.splice(indexInSelectedIndex, 1)
-      } else {
-        selectedIndex.push(index)
-      }
+      const activities = toggleSelected(index, this.state.activities)
+      const selectedIndex = updateSelectedIndex(index, this.state.selectedIndex)
       this.setState({activities, selectedIndex})
     }
 

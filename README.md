@@ -4,9 +4,11 @@ Migrate Strava and NIke+ Run Club data
 
 # TO-DO
 
-Refactor handleSelect code into util function since it is used in 3 different places
+Make download to CSV function and button
 
-Make download functions
+Create Select All button for all data pages
+
+Expand and clean table and Nike API result from backend
 
 App crashes if I click all over table too quickly
 

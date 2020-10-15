@@ -4,6 +4,9 @@ import DownloadButton from "./downloadButton";
 import NikeForm from "./nikeForm";
 import getNike from "../utils/getNike"
 import NavBar from "./navBar"
+import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected"
+import downloadJSON from "../utils/downloadJSON"
+
 
 class NikeExport extends Component {
   state = {
@@ -18,17 +21,14 @@ class NikeExport extends Component {
   }
 
   handleSelect = (index) => {
-    const activities = [...this.state.activities];
-    activities[index].isSelected = !activities[index].isSelected;
-    
-    const selectedIndex = [...this.state.selectedIndex];
-    if (selectedIndex.includes(index)) {
-      const indexInSelectedIndex = selectedIndex.indexOf(index)
-      selectedIndex.splice(indexInSelectedIndex, 1)
-    } else {
-      selectedIndex.push(index)
-    }
+    const activities = toggleSelected(index, this.state.activities)
+    const selectedIndex = updateSelectedIndex(index, this.state.selectedIndex)
     this.setState({activities, selectedIndex})
+  }
+
+  handleDownload = () => {
+    const a = downloadJSON(this.state.activities, this.state.selectedIndex, "Nike Data")
+    a.click()
   }
 
   render() {
@@ -38,7 +38,7 @@ class NikeExport extends Component {
         <NavBar title="Nike Export"/>
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit}/>
-        <DownloadButton />
+        <DownloadButton handleDownload={this.handleDownload}/>
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect}/>}
         </div>
