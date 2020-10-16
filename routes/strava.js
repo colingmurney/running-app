@@ -4,25 +4,7 @@ const router = express.Router();
 const fetch = require("node-fetch");
 const jsonParser = bodyParser.json();
 const formatStrava = require("../utils/formatStrava")
-
-function getAccessToken(client_id, client_secret, refresh_token) {
-  const data = {
-    client_id: client_id,
-    client_secret: client_secret,
-    refresh_token: refresh_token,
-    grant_type: "refresh_token",
-  };
-
-  return fetch("https://www.strava.com/oauth/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  }).then((response) => {
-    return response.json();
-  });
-}
+const getAccessToken = require("../utils/getAccessToken")
 
 function getActivities(access_token) {
   const activitiesURL = `https://www.strava.com/api/v3/athlete/activities?access_token=${access_token}`;
@@ -36,16 +18,14 @@ function getActivities(access_token) {
 
 router.post("/getActivities", jsonParser, async (req, res) => {
   try {
-  const response = await getAccessToken(
-      req.body.client_id,
-      req.body.client_secret,
-      req.body.refresh_token
-    )
-  const activities = await getActivities(response.access_token)
-  
-  const formattedActivities = formatStrava(activities)
-
-  res.send(formattedActivities)
+    const response = await getAccessToken(
+        req.body.client_id,
+        req.body.client_secret,
+        req.body.refresh_token
+      ) 
+    const activities = await getActivities(response.access_token)
+    const formattedActivities = formatStrava(activities)
+    res.send(formattedActivities)
   }
   catch(error) {
     res.send(error)

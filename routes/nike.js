@@ -21,7 +21,6 @@ router.post("/getActivities", jsonParser, async (req, res) => {
   try {
     const activities = await getActivities(req.body.bearer);
     const formattedNike = formatNike(activities);
-    console.log(formattedNike)
     res.send(formattedNike)
   }
   catch(error) {

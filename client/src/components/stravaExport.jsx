@@ -28,17 +28,18 @@ class StravaExport extends Component {
         this.state.client_secret,
         authCode
       );
+  
       const activities = await getActivities(
         this.state.client_id,
         this.state.client_secret,
         refresh_token
       );
+
       sessionStorage.setItem("stravaActivities", JSON.stringify(activities));
       sessionStorage.setItem("read_refresh_token", refresh_token)
       this.setState({ activities });
-    } catch (error) {
-      console.log(error);
-    }
+    } 
+    catch (error) {console.log(error);}
     }
   }
 
@@ -54,6 +55,7 @@ class StravaExport extends Component {
   }  
 
   render() {
+    //console.log(this.state.activities)
     return (
       <div>
         <NavBar title="Strava Export"/>
