@@ -13,8 +13,10 @@ class Converter extends Component {
     client_id: "47805",
     client_secret: "aeb849953d794088bb82fbce08b6e12588fa7725",
     refresh_token: sessionStorage.getItem("write_refresh_token") || "",
+    bearer_token: sessionStorage.getItem("nike_bearer_token") || "",
     activities: JSON.parse(sessionStorage.getItem("nikeActivities")) || [],
     selectedIndex: [],
+    //test: [{name: "Colin"}, null,{name: "Colin"}],
   }
    
   async componentDidMount(){
@@ -44,10 +46,15 @@ class Converter extends Component {
     handleSubmit = async (token) => {
       const activities = await getNike(token)
       sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
+      sessionStorage.setItem("nike_bearer_token", token);
       this.setState({activities})
     }
 
     handleConvert = async () => {
+      //use refresh token from state to get access_token
+      //create function that makes http request passing nike_bearer, access_token, and selectedIndex in the body
+      //response will be array of ids, make check update http requests with these IDs and see status for each
+
       let {client_id, client_secret, activities, selectedIndex, refresh_token} = this.state
 
       if (!refresh_token) return console.log("No refresh token (Please give authorization)")
@@ -67,14 +74,11 @@ class Converter extends Component {
             activities[i].description,
             activities[i].distance
           );
-          delete activities[i]
+          delete activities[i] //turns object to null, but does not effect indexing
           console.log(activityCreated)
           
         }
-        //filter out runs just converted and reset selectedIndex
-        activities = activities.filter(function (el) {
-          return el != null;
-        });
+       //reset selected
         selectedIndex = []
 
         this.setState({activities, selectedIndex})
@@ -91,7 +95,6 @@ class Converter extends Component {
 
   render() {
     const {activities} = this.state;
-
     return (
       <div>
         <NavBar title="Converter"/>

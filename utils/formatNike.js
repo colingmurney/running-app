@@ -12,7 +12,6 @@ function formatNike(nikeActivities) {
   
   nikeActivities.forEach((activity) => {
     
-
     //get summaries array for later use
     let summaries = activity.summaries;
 

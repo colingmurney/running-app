@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//use for manual entry and use in a loop for Nike conversion to convert all runs selected
+//use for manual entry
 
 async function createActivity(client_id, client_secret, refresh_token, name, type, start_date_local, moving_time, description, distance) {
     return axios({

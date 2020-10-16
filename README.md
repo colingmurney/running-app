@@ -4,7 +4,9 @@ Migrate Strava and NIke+ Run Club data
 
 # TO-DO
 
-Make download to CSV function and button
+Refactor to remove StravaTemplate and just make a new object each iteration in formatNike.js
+
+Make download to CSV function and button (make form that gives choice JSON or CSV)
 
 Create Select All button for all data pages
 

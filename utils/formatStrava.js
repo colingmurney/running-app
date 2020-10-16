@@ -1,6 +1,7 @@
+//Add isSelected field to Strava activities
 function formatStrava(stravaActivities) {  
-    for (let i of stravaActivities) {
-        i["isSelected"] = false;
+    for (let activity of stravaActivities) {
+        activity["isSelected"] = false;
     }
     return stravaActivities
 }

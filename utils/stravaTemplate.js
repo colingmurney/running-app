@@ -1,4 +1,4 @@
-//want to expand this constructor to include every Strava property
+//probably dont even need this, can just make new object every time in formatNike.js
 
 class StravaTemplate {
   constructor(
