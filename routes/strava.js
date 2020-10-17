@@ -5,15 +5,19 @@ const fetch = require("node-fetch");
 const jsonParser = bodyParser.json();
 const formatStrava = require("../utils/formatStrava")
 const getAccessToken = require("../utils/getAccessToken")
+const axios = require("axios")
 
 function getActivities(access_token) {
-  const activitiesURL = `https://www.strava.com/api/v3/athlete/activities?access_token=${access_token}`;
-
-  return fetch(activitiesURL)
-    .then((response) => response.json())
-    .then((result) => {
-      return result;
-    });
+    return axios({
+      method: "get",
+      url: `https://www.strava.com/api/v3/athlete/activities?per_page=200`, //200 limit
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      }
+    }).then(response => {
+      console.log(response.data)
+      return response.data
+    });  
 }
 
 router.post("/getActivities", jsonParser, async (req, res) => {

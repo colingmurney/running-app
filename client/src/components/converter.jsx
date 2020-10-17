@@ -65,22 +65,28 @@ class Converter extends Component {
       if (!refresh_token) return console.log("No refresh token (Please give authorization)")
 
       try {
-      //use refresh token from state to get access_token
-        const access_token = await getAccessToken(client_id, client_secret, refresh_token);
-        console.log(access_token)
+        //use refresh token from state to get access_token
+          const access_token = await getAccessToken(client_id, client_secret, refresh_token);
 
-      //create function that makes http request passing nike_bearer, access_token, and selectedIndex in the body
-      const uploadIds = await uploadActivities(selectedIndex, access_token, bearer_token)
-      console.log(uploadIds)
+        //create function that makes http request passing nike_bearer, access_token, and selectedIndex in the body
+        const uploadIds = await uploadActivities(selectedIndex, access_token, bearer_token)
+        console.log(uploadIds)
       
-      //   loop through selected index and delete activities
-      for (let i of selectedIndex) {
-        delete activities[i] //turns object to null, but does not effect indexing
-      }
-      //reset selectedIndex
-      selectedIndex = []
-      this.setState({activities, selectedIndex, uploadIds, access_token})
-      
+        //remove uploaded activities from table without throwing off the indexing
+          // for (let i=0; i<uploadIds.length; i++) {
+          //   if (uploadIds[i] !== null) {
+          //     delete activities[selectedIndex[i]];
+          //     selectedIndex.splice(i, 1)        
+          //   }
+          // }
+
+        for (let i of selectedIndex) {
+          delete activities[i]
+        }
+        
+        selectedIndex = [];
+        this.setState({activities, selectedIndex, uploadIds, access_token})
+        
       } catch (error) {
         console.log(error);
       }
@@ -107,6 +113,7 @@ class Converter extends Component {
 
   render() {
     const {activities} = this.state;
+    console.log(this.state.selectedIndex)
     return (
       <div>
         <NavBar title="Converter"/>

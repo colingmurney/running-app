@@ -7,59 +7,50 @@ const createGpx = require("gps-to-gpx").default;
 const fs = require('fs');
 const fsPromises = fs.promises;
 const FormData = require("form-data");
+const getNikeActivities = require("../utils/getNikeActivities")
+const filterBadData = require("../utils/filterBadData")
 
-function getActivitiesMetrics(token) {
-    return axios({
-      method: "get",
-      url: "https://api.nike.com/sport/v3/me/activities/after_time/0?metrics=latitude,longitude", //metric objects are returned alphabetically
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((response) => {
-      return response.data.activities;
-    })
-  }
+function uploadActivity(access_token, activity_type, name, description, filename) {
+  const data = new FormData();
 
-  function uploadActivity(access_token, activity_type, name, description, filename) {
-    console.log("upload function called")
+  data.append('file', fs.createReadStream(`./gpx/${filename}`))
 
-    const data = new FormData();
-
-    data.append('file', fs.createReadStream(`./gpx/${filename}`))
-
-    return axios({
-      method: "post",
-      url: `https://www.strava.com/api/v3/uploads?activity_type=${activity_type}&name=${name}&description=${description}&data_type=gpx`,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        ...data.getHeaders()
-      },
-      data: data
-    //    {
-    //       activity_type: activity_type,
-    //       name: name,
-    //       description: description,
-    //       data_type: "gpx",
-    //       file: fs.createReadStream(`./gpx/${filename}`)
-
-    //   }
-    }).then((response) => {
-      return (response.data);
-    }).catch(err => {return err})
-  }
-
+  return axios({
+    method: "post",
+    url: `https://www.strava.com/api/v3/uploads?activity_type=${activity_type}&name=${name}&description=${description}&data_type=gpx`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      ...data.getHeaders()
+    },
+    data: data
   
+  }).then((response) => {
+    return (response.data);
+  }).catch(err => {return err})
+}
+
   router.post("/importActivities", jsonParser, async (req, res) => {
     try {
-      activities = await getActivitiesMetrics(req.body.bearer);
-      filteredActivities = [];
+      let after_time = 0
+      let allActivities = [];
     
-      for (let i of req.body.selectedIndex) {
-          filteredActivities.push(activities[i])
-      }
+      do {
+        let {activities, paging} = await getNikeActivities(req.body.bearer, true, after_time);
+        for (let activity of activities) {
+          if (filterBadData(activity)) {
+          allActivities.push(activity)
+          }
+        }
+        after_time = paging.after_time
+      } while (after_time)
+
+        let selectedActivities = [];
+        for (let i of req.body.selectedIndex) {
+            selectedActivities.push(allActivities[i])
+        }
 
       const resultIds = [];
-      for (let activity of filteredActivities) {
+      for (let activity of selectedActivities) {
         let type = activity.type;
         let name = activity.tags["com.nike.name"];
         let description = `${activity.tags["com.nike.temperature"]} degrees. ${activity.tags["com.nike.weather"]}. Imported from Nike Run Club`;
@@ -88,27 +79,18 @@ function getActivitiesMetrics(token) {
         const gpx = createGpx(waypoints)
 
         try {
-        fsPromises.appendFile(`./gpx/${filename}`, gpx);        
-        } catch(e) {
-        console.log(e)
-        }
-        console.log("created")
+          await fsPromises.appendFile(`./gpx/${filename}`, gpx);        
+        } catch(e) {console.log(e)}
         
         const result = await uploadActivity(req.body.access_token, type, name, description, filename)
-        console.log(result.id)
         resultIds.push(result.id)
 
-        //send the result.id to the cllent
-
         try {
-            fsPromises.unlink(`./gpx/${filename}`);  
-        } catch(e) {
-        console.log(e)
-        }
+            await fsPromises.unlink(`./gpx/${filename}`);  
+        } catch(e) {console.log(e)}
       }
-        //res.send(`${filteredActivities.length} runs added to Strava`)
 
-        res.send(resultIds)
+      res.send(resultIds)
     }
     catch(error) {
       res.send(error)
