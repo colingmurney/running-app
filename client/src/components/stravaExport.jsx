@@ -5,9 +5,10 @@ import Table from "./table";
 import DownloadButton from "./downloadButton";
 import NavBar from "./navBar";
 import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected";
-import downloadJSON from "../utils/downloadJSON";
 import SelectAllButton from "./selectAllButton";
 import handleSelectAll from "../utils/handleSelectAll";
+import downloadJSON from "../utils/downloadJSON";
+import stravaDownload from "../utils/stravaDownload"
 
 class StravaExport extends Component {
   state = {
@@ -20,7 +21,6 @@ class StravaExport extends Component {
   };
 
   async componentDidMount() {
-    if (!this.state.refresh_token) {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const authCode = params.get("code");
@@ -35,16 +35,15 @@ class StravaExport extends Component {
       const activities = await getActivities(
         this.state.client_id,
         this.state.client_secret,
-        refresh_token
+        refresh_token,
       );
 
       sessionStorage.setItem("stravaActivities", JSON.stringify(activities));
       sessionStorage.setItem("read_refresh_token", refresh_token)
-      this.setState({ activities });
+      this.setState({ activities, refresh_token });
     } 
     catch (error) {console.log(error);}
-    }
-  }
+  } 
 
   handleSelect = (index) => {
     const activities = toggleSelected(index, this.state.activities)
@@ -52,8 +51,10 @@ class StravaExport extends Component {
     this.setState({activities, selectedIndex})
   }
 
-  handleDownload = () => {
-    const a = downloadJSON(this.state.activities, this.state.selectedIndex, "Strava Data")
+  handleDownload = async () => {
+    const {client_id, client_secret, refresh_token, selectedIndex} = this.state;
+    const activities = await stravaDownload(client_id, client_secret, refresh_token, selectedIndex)
+    const a = await downloadJSON(activities, "Strava Data")
     a.click()
   } 
 
@@ -71,7 +72,7 @@ class StravaExport extends Component {
         <NavBar title="Strava Export"/>
         <div className="container">
         <DownloadButton handleDownload={this.handleDownload} />
-        <SelectAllButton handleSelectAll={this.handleSelectAll} />
+        <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect}/>}
         </div>

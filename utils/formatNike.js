@@ -1,31 +1,13 @@
 const capitalizeFirstLetter = require("./capitalizeFirstLetter")
+const durationToHMS = require("./durationToHMS")
+
 
 function searchSummaries(summaries, metric) {
+  //find matching metric object in array of metric objects
   for (const summary of summaries) {
     if (summary.metric === metric) return summary.value;
   }
 }
-
-function msToHMS( ms ) {
-  // 1- Convert to seconds:
-  var seconds = ms / 1000;
-  // 2- Extract hours:
-  var hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
-  seconds = seconds % 3600; // seconds remaining after extracting hours
-  // 3- Extract minutes:
-  var minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
-  // 4- Keep only seconds not extracted to minutes:
-  seconds = Math.round(seconds % 60);
-
-  if (seconds < 10) seconds = `0${seconds}`
-  if (minutes < 10) minutes = `0${minutes}`
-
-  
-  if (hours === 0) return `${minutes}:${seconds}`
-  return `${hours}:${minutes}:${seconds}`
-} 
-
-
 
 function formatNike(nikeActivities) {
   const formattedNike = [];
@@ -35,7 +17,7 @@ function formatNike(nikeActivities) {
 
     let name = activity.tags["com.nike.name"] || "Nike Run";
     let type = capitalizeFirstLetter(activity.type);
-    let moving_time = msToHMS(activity.active_duration_ms);
+    let moving_time = durationToHMS(activity.active_duration_ms, true);
     let date = new Date(parseInt(activity.start_epoch_ms));
     let start_date_local =
       date.getUTCFullYear() +
@@ -56,7 +38,7 @@ function formatNike(nikeActivities) {
       weather: weather,
       distance: distance,
       total_elevation_gain: total_elevation_gain,
-      isSelected
+      isSelected: isSelected
     }
     
     //append template to formatted nike array

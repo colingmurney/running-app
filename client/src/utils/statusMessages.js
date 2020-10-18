@@ -10,8 +10,8 @@ function statusMessages(messages) {
     }
 
     if (countReady) {alert(`${countReady} runs were successly uploaded to Strava`)}
-    if (countProcessing) {alert(`${countReady} runs are is still being processed by Strava`)}
-    if (countError) {alert(`${countReady} runs experienced an error during processing. The activities may already be uploaded to Strava.`)}
+    if (countProcessing) {alert(`${countProcessing} runs are is still being processed by Strava`)}
+    if (countError) {alert(`${countError} runs experienced an error during processing. The activities may already be uploaded to Strava.`)}
 }
 
 export default statusMessages;

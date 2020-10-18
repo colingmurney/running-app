@@ -5,13 +5,15 @@ import NikeForm from "./nikeForm";
 import getNike from "../utils/getNike";
 import NavBar from "./navBar";
 import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected";
-import downloadJSON from "../utils/downloadJSON";
 import SelectAllButton from "./selectAllButton";
 import handleSelectAll from "../utils/handleSelectAll";
+import downloadJSON from "../utils/downloadJSON";
+import nikeDownload from "../utils/nikeDownload"
 
 class NikeExport extends Component {
   state = {
     activities: JSON.parse(sessionStorage.getItem("nikeActivities")) || [],
+    bearer_token: sessionStorage.getItem("nike_bearer_token") || "",
     selectedIndex: [],
     selectAll: false
   }
@@ -19,7 +21,8 @@ class NikeExport extends Component {
   handleSubmit = async (token) => {
     const activities = await getNike(token)
     sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
-    this.setState({activities})
+    sessionStorage.setItem("nike_bearer_token", token);
+    this.setState({activities, bearer_token: token})
   }
 
   handleSelect = (index) => {
@@ -28,8 +31,10 @@ class NikeExport extends Component {
     this.setState({activities, selectedIndex})
   }
 
-  handleDownload = () => {
-    const a = downloadJSON(this.state.activities, this.state.selectedIndex, "Nike Data")
+  handleDownload = async () => {
+    const {bearer_token, selectedIndex} = this.state
+    const activities = await nikeDownload(bearer_token, selectedIndex)
+    const a = await downloadJSON(activities, "Nike Data")
     a.click()
   }
 
@@ -48,7 +53,7 @@ class NikeExport extends Component {
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit}/>
         <DownloadButton handleDownload={this.handleDownload}/>
-        <SelectAllButton handleSelectAll={this.handleSelectAll} />
+        <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect}/>}
         </div>

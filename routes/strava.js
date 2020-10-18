@@ -25,16 +25,36 @@ router.post("/getActivities", jsonParser, async (req, res) => {
         req.body.client_id,
         req.body.client_secret,
         req.body.refresh_token
-      ) 
+      )
     const activities = await getActivities(response.access_token)
+    
     const formattedActivities = formatStrava(activities)
     res.send(formattedActivities)
   }
   catch(error) {
     res.send(error)
   }
-  
 });
+
+router.post("/download", jsonParser, async (req, res) => {
+  try {
+    const response = await getAccessToken(
+      req.body.client_id,
+      req.body.client_secret,
+      req.body.refresh_token
+    )
+    const activities = await getActivities(response.access_token)
+    
+    let activitiesJSON = []
+    for (let i of req.body.selectedIndex) {
+        const activity = JSON.stringify(activities[i])
+        activitiesJSON.push(activity)
+    }
+    res.send(JSON.stringify(activitiesJSON))
+  } catch (error) {
+    res.send(error)
+  }
+})
 
 function createActivity(
   name,

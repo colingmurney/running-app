@@ -11,7 +11,6 @@ class Table extends Component {
 
   render() {
     const {activities} = this.props;
-    console.log(activities)
     return (
       <table className="table mt-3">
         <thead>

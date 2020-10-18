@@ -55,7 +55,7 @@ class Converter extends Component {
       sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
       sessionStorage.setItem("nike_bearer_token", token);
       const step = authMsg()
-      this.setState({activities, step})
+      this.setState({activities, step, bearer_token: token})
     }
 
     handleSelect = (index) => {
@@ -66,8 +66,6 @@ class Converter extends Component {
 
     handleConvert = async () => {
       let {client_id, client_secret, selectedIndex, refresh_token, bearer_token, activities} = this.state
-
-      if (!refresh_token) return console.log("No refresh token (Please give authorization)")
 
       try {
         //use refresh token from state to get access_token
@@ -106,9 +104,16 @@ class Converter extends Component {
 
     handleSelectAll = () => {
       let {selectAll, activities} = this.state;
+      let selectedIndex = []
+
+      if (!selectAll) {
+        for (let i=0; i<activities.length; i++)
+        selectedIndex.push(i);
+      }
+
       activities = handleSelectAll(selectAll, activities);
       selectAll = !selectAll;
-      this.setState({selectAll, activities})
+      this.setState({selectAll, activities, selectedIndex})
     }
 
   render() {
@@ -126,7 +131,7 @@ class Converter extends Component {
         </button>
         <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleConvert} disabled={step !== convertMsg() || selectedIndex.length === 0}>Convert</button>
         <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleStatus} disabled={step !== statusMsg()}>Status</button>
-        <SelectAllButton handleSelectAll={this.handleSelectAll} />
+        <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} />}
       </div>
