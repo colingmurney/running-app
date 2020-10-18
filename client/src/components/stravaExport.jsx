@@ -74,7 +74,7 @@ class StravaExport extends Component {
         <DownloadButton handleDownload={this.handleDownload} />
         <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
-        <Table activities={activities} handleSelect={this.handleSelect}/>}
+        <Table activities={activities} handleSelect={this.handleSelect} type="strava"/>}
         </div>
       </div>
     );

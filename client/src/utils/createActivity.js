@@ -5,7 +5,7 @@ import axios from "axios";
 async function createActivity(client_id, client_secret, refresh_token, name, type, start_date_local, moving_time, description, distance) {
     return axios({
         method: "post",
-        url: "http://localhost:8000/api/strava/createActivity",
+        url: "/api/strava/createActivity",
         data: {
           client_id: client_id,
           client_secret: client_secret,

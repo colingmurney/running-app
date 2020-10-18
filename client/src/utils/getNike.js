@@ -3,7 +3,7 @@ import axios from "axios";
 async function getNike(bearer) {
   return axios({
     method: "post",
-    url: "http://localhost:8000/api/nike/getActivities",
+    url: "/api/nike/getActivities",
     data: {
       bearer: bearer,
     },

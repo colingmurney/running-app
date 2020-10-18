@@ -1,14 +1,21 @@
-const { response } = require("express");
 const express = require("express");
-const fetch = require("node-fetch");
-const request = require("request");
-const bodyParser = require("body-parser");
+const path = require('path')
 
+//Use Routes
 const app = express();
-
 require("./routes")(app);
 
-const port = 8000;
+//Serve static assets if in production
+if(process.env.NODE_ENV === 'production') {
+  //Set static folder
+  app.use(express.static('client/build'))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  });
+}
+
+const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });

@@ -133,7 +133,7 @@ class Converter extends Component {
         <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleStatus} disabled={step !== statusMsg()}>Status</button>
         <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
-        <Table activities={activities} handleSelect={this.handleSelect} />}
+        <Table activities={activities} handleSelect={this.handleSelect} type="nike" />}
       </div>
       </div>
     );

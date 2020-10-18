@@ -3,7 +3,7 @@ import axios from "axios";
 function getActivities(client_id, client_secret, refresh_token) {
   return axios({
     method: "post",
-    url: "http://localhost:8000/api/strava/getActivities",
+    url: "/api/strava/getActivities",
     data: {
       client_id: client_id,
       client_secret: client_secret,

@@ -10,7 +10,7 @@ class Table extends Component {
   }
 
   render() {
-    const {activities} = this.props;
+    const {activities, type} = this.props;
     return (
       <table className="table mt-3">
         <thead>
@@ -21,8 +21,8 @@ class Table extends Component {
             <th scope="col">Distance (KM)</th>
             <th scope="col">Time</th>
             <th scope="col">Elevation (Meters)</th>
-            {activities[0].average_heartrate && <th scope="col">Heartrate</th>}
-            {activities[0].weather && <th scope="col">Weather</th>}
+            {type === "strava" && <th scope="col">Heartrate</th>}
+            {type === "nike" && <th scope="col">Weather</th>}
             <th scope="col"></th>
           </tr>
         </thead>
@@ -35,8 +35,8 @@ class Table extends Component {
               <td id={index}>{activity.distance}</td>
               <td id={index}>{activity.moving_time}</td>
               <td id={index}>{activity.total_elevation_gain}</td>
-              {activity.average_heartrate && <td id={index}>{activity.average_heartrate}</td>}
-              {activity.weather && <td id={index}>{activity.weather}</td>}
+              {type === "strava" && <td id={index}>{activity.average_heartrate}</td>}
+              {type === "nike" && <td id={index}>{activity.weather}</td>}
               <td id={index}><i className={activity.isSelected ? "fa fa-check" : ""} aria-hidden="true"></i></td>
             </tr>
           ))}
