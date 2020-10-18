@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class OtherOptions extends Component {
-  state = {};
+  state = {returnLink: "https://agile-savannah-82739.herokuapp.com/strava"};
   render() {
     return (
       <div className="row">
@@ -12,7 +12,7 @@ class OtherOptions extends Component {
           <p>
             <a
               className="btn btn-secondary"
-              href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/strava/exchange_token&approval_prompt=force&scope=activity:read_all"
+              href={`http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${this.state.returnLink}/exchange_token&approval_prompt=force&scope=activity:read_all`}
               role="button"
             >
               Strava data&raquo;

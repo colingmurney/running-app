@@ -24,7 +24,8 @@ class Converter extends Component {
     selectedIndex: [],
     uploadIds: [],
     step: sessionStorage.getItem("write_refresh_token") ? convertMsg() : sessionStorage.getItem("nikeActivities") ? authMsg() : tokenMsg(),
-    selectAll: false
+    selectAll: false,
+    returnLink: "https://agile-savannah-82739.herokuapp.com/converter"
   }
    
   async componentDidMount(){
@@ -117,7 +118,7 @@ class Converter extends Component {
     }
 
   render() {
-    const {activities, selectedIndex ,step} = this.state;
+    const {activities, selectedIndex, step, returnLink} = this.state;
     return (
       <div>
         <NavBar step={step} title="Converter"/>
@@ -125,7 +126,7 @@ class Converter extends Component {
         <NikeForm handleSubmit={this.handleSubmit} />
         <button className="btn btn-primary btn-sm mr-2 custom-width">
           <a className="link" 
-            href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/converter/exchange_token&approval_prompt=force&scope=activity:write">
+            href={`http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${returnLink}/exchange_token&approval_prompt=force&scope=activity:write`}>
               Authorize
           </a>
         </button>
