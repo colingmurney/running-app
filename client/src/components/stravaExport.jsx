@@ -3,9 +3,11 @@ import getRefreshToken from "../utils/getRefreshToken";
 import getActivities from "../utils/getActivities";
 import Table from "./table";
 import DownloadButton from "./downloadButton";
-import NavBar from "./navBar"
-import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected"
-import downloadJSON from "../utils/downloadJSON"
+import NavBar from "./navBar";
+import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected";
+import downloadJSON from "../utils/downloadJSON";
+import SelectAllButton from "./selectAllButton";
+import handleSelectAll from "../utils/handleSelectAll";
 
 class StravaExport extends Component {
   state = {
@@ -13,7 +15,8 @@ class StravaExport extends Component {
     client_secret: "aeb849953d794088bb82fbce08b6e12588fa7725",
     activities: JSON.parse(sessionStorage.getItem("stravaActivities")) || [],
     refresh_token: sessionStorage.getItem("read_refresh_token") || "",
-    selectedIndex: []
+    selectedIndex: [],
+    selectAll: false,
   };
 
   async componentDidMount() {
@@ -52,16 +55,25 @@ class StravaExport extends Component {
   handleDownload = () => {
     const a = downloadJSON(this.state.activities, this.state.selectedIndex, "Strava Data")
     a.click()
-  }  
+  } 
+
+  handleSelectAll = () => {
+    let {selectAll, activities} = this.state;
+    activities = handleSelectAll(selectAll, activities);
+    selectAll = !selectAll;
+    this.setState({selectAll, activities})
+  }
 
   render() {
-    //console.log(this.state.activities)
+    const {activities} = this.state
     return (
       <div>
         <NavBar title="Strava Export"/>
         <div className="container">
         <DownloadButton handleDownload={this.handleDownload} />
-        <Table activities={this.state.activities} handleSelect={this.handleSelect} />
+        <SelectAllButton handleSelectAll={this.handleSelectAll} />
+        {activities && !!activities.length &&
+        <Table activities={activities} handleSelect={this.handleSelect}/>}
         </div>
       </div>
     );

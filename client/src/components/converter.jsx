@@ -8,6 +8,10 @@ import NavBar from "./navBar";
 import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected"
 import getAccessToken from "../utils/getAccessToken";
 import checkUploadStatus from "../utils/checkUploadStatus"
+import {tokenMsg, authMsg, convertMsg, statusMsg} from "../utils/stepMessages"
+import statusMessages from "../utils/statusMessages"
+import SelectAllButton from "./selectAllButton";
+import handleSelectAll from "../utils/handleSelectAll";
 
 class Converter extends Component {
   state = {
@@ -19,8 +23,8 @@ class Converter extends Component {
     activities: JSON.parse(sessionStorage.getItem("nikeActivities")) || [],
     selectedIndex: [],
     uploadIds: [],
-    uploadMessages: [],
-    err: ""
+    step: sessionStorage.getItem("write_refresh_token") ? convertMsg() : sessionStorage.getItem("nikeActivities") ? authMsg() : tokenMsg(),
+    selectAll: false
   }
    
   async componentDidMount(){
@@ -36,9 +40,9 @@ class Converter extends Component {
             this.state.client_secret,
             authCode
           )
-
           sessionStorage.setItem("write_refresh_token", refresh_token)
-          this.setState({refresh_token})
+          const step = convertMsg()
+          this.setState({refresh_token, step})
         } catch(error) {
           console.log(error)
         }
@@ -50,7 +54,8 @@ class Converter extends Component {
       const activities = await getNike(token)
       sessionStorage.setItem("nikeActivities", JSON.stringify(activities));
       sessionStorage.setItem("nike_bearer_token", token);
-      this.setState({activities})
+      const step = authMsg()
+      this.setState({activities, step})
     }
 
     handleSelect = (index) => {
@@ -72,20 +77,14 @@ class Converter extends Component {
         const uploadIds = await uploadActivities(selectedIndex, access_token, bearer_token)
         console.log(uploadIds)
       
-        //remove uploaded activities from table without throwing off the indexing
-          // for (let i=0; i<uploadIds.length; i++) {
-          //   if (uploadIds[i] !== null) {
-          //     delete activities[selectedIndex[i]];
-          //     selectedIndex.splice(i, 1)        
-          //   }
-          // }
-
+        //remove uploaded activitites from table with delete to not throw off indexing
         for (let i of selectedIndex) {
           delete activities[i]
         }
         
         selectedIndex = [];
-        this.setState({activities, selectedIndex, uploadIds, access_token})
+        const step = statusMsg()
+        this.setState({activities, selectedIndex, uploadIds, access_token, step})
         
       } catch (error) {
         console.log(error);
@@ -94,34 +93,40 @@ class Converter extends Component {
 
     handleStatus = async () => {
       const {uploadIds, access_token} = this.state;
-
-      if (uploadIds.length > 0) {
         const uploadMessages = [];
         for (let id of uploadIds) {
           const uploadStatus = await checkUploadStatus(id, access_token)
           console.log(uploadStatus)
           uploadMessages.push(uploadStatus)
         }
-        this.setState({uploadMessages})
-      } 
-      else {
-        //display message if no runs have been converted
-        const err = "Please convert activities before checking their status";
-        this.setState({err});
-      }
+        const step = convertMsg();
+        statusMessages(uploadMessages)
+        this.setState({step})
+    }
+
+    handleSelectAll = () => {
+      let {selectAll, activities} = this.state;
+      activities = handleSelectAll(selectAll, activities);
+      selectAll = !selectAll;
+      this.setState({selectAll, activities})
     }
 
   render() {
-    const {activities} = this.state;
-    console.log(this.state.selectedIndex)
+    const {activities, selectedIndex ,step} = this.state;
     return (
       <div>
-        <NavBar title="Converter"/>
+        <NavBar step={step} title="Converter"/>
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit} />
-        <button><a href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/converter/exchange_token&approval_prompt=force&scope=activity:write">authorize</a></button>
-        <button onClick={this.handleConvert}>Convert</button>
-        <button onClick={this.handleStatus}>Status</button>
+        <button className="btn btn-primary btn-sm mr-2 custom-width">
+          <a className="link" 
+            href="http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=http://localhost:3000/converter/exchange_token&approval_prompt=force&scope=activity:write">
+              Authorize
+          </a>
+        </button>
+        <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleConvert} disabled={step !== convertMsg() || selectedIndex.length === 0}>Convert</button>
+        <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleStatus} disabled={step !== statusMsg()}>Status</button>
+        <SelectAllButton handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} />}
       </div>

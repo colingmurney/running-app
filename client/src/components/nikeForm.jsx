@@ -20,6 +20,7 @@ class NikeForm extends Component {
                         type="text"
                         name="token"
                         ref={(input) => (this.token = input)}
+                        autoComplete="off"
                     />
                 </div>
                 <button type="submit" className="btn btn-primary mb-2">

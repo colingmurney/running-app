@@ -7,7 +7,7 @@ class MainOption extends Component {
     return (
       <div className="jumbotron">
         <div className="container">
-          <h1 className="display-3">Athletic App Data Converter</h1>
+          <h1 className="display-3">Running Data Converter</h1>
           <p>
             You can use this application to convert activities data from Nike+
             Run Club to your Strava account. There are also other features
