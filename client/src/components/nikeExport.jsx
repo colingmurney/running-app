@@ -6,7 +6,7 @@ import getNike from "../utils/getNike";
 import NavBar from "./navBar";
 import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected";
 import SelectAllButton from "./selectAllButton";
-import handleSelectAll from "../utils/handleSelectAll";
+import {handleSelectAll, fillOrEmptyIndex} from "../utils/handleSelectAll";
 import downloadJSON from "../utils/downloadJSON";
 import nikeDownload from "../utils/nikeDownload"
 
@@ -41,8 +41,9 @@ class NikeExport extends Component {
   handleSelectAll = () => {
     let {selectAll, activities} = this.state;
     activities = handleSelectAll(selectAll, activities);
+    let selectedIndex = fillOrEmptyIndex(selectAll, activities)
     selectAll = !selectAll;
-    this.setState({selectAll, activities})
+    this.setState({selectAll, activities, selectedIndex})
   }
 
   render() {
@@ -52,7 +53,7 @@ class NikeExport extends Component {
         <NavBar title="Nike Export"/>
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit}/>
-        <DownloadButton handleDownload={this.handleDownload}/>
+        <DownloadButton handleDownload={this.handleDownload} />
         <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} type="nike"/>}

@@ -5,7 +5,7 @@ class Table extends Component {
   state = {};
 
   onSelect = (e) => {
-    const index = e.target.id
+    const index = parseInt(e.target.id)
     this.props.handleSelect(index)
   }
 

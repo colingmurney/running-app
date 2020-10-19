@@ -11,7 +11,7 @@ import checkUploadStatus from "../utils/checkUploadStatus"
 import {tokenMsg, authMsg, convertMsg, statusMsg} from "../utils/stepMessages"
 import statusMessages from "../utils/statusMessages"
 import SelectAllButton from "./selectAllButton";
-import handleSelectAll from "../utils/handleSelectAll";
+import {handleSelectAll, fillOrEmptyIndex} from "../utils/handleSelectAll";
 
 class Converter extends Component {
   state = {
@@ -25,7 +25,7 @@ class Converter extends Component {
     uploadIds: [],
     step: sessionStorage.getItem("write_refresh_token") ? convertMsg() : sessionStorage.getItem("nikeActivities") ? authMsg() : tokenMsg(),
     selectAll: false,
-    returnLink: "https://agile-savannah-82739.herokuapp.com/converter" //http://localhost:3000/converter
+    returnLink: "http://localhost:3000/converter" //https://agile-savannah-82739.herokuapp.com/converter
   }
    
   async componentDidMount(){
@@ -105,14 +105,8 @@ class Converter extends Component {
 
     handleSelectAll = () => {
       let {selectAll, activities} = this.state;
-      let selectedIndex = []
-
-      if (!selectAll) {
-        for (let i=0; i<activities.length; i++)
-        selectedIndex.push(i);
-      }
-
       activities = handleSelectAll(selectAll, activities);
+      let selectedIndex = fillOrEmptyIndex(selectAll, activities)
       selectAll = !selectAll;
       this.setState({selectAll, activities, selectedIndex})
     }

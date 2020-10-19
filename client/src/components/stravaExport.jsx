@@ -6,7 +6,7 @@ import DownloadButton from "./downloadButton";
 import NavBar from "./navBar";
 import {toggleSelected, updateSelectedIndex} from "../utils/handleSelected";
 import SelectAllButton from "./selectAllButton";
-import handleSelectAll from "../utils/handleSelectAll";
+import {handleSelectAll, fillOrEmptyIndex} from "../utils/handleSelectAll";
 import downloadJSON from "../utils/downloadJSON";
 import stravaDownload from "../utils/stravaDownload"
 
@@ -61,17 +61,19 @@ class StravaExport extends Component {
   handleSelectAll = () => {
     let {selectAll, activities} = this.state;
     activities = handleSelectAll(selectAll, activities);
+    let selectedIndex = fillOrEmptyIndex(selectAll, activities)
     selectAll = !selectAll;
-    this.setState({selectAll, activities})
+    this.setState({selectAll, activities, selectedIndex})
   }
 
   render() {
-    const {activities} = this.state
+    const {activities, selectedIndex} = this.state
+    
     return (
       <div>
         <NavBar title="Strava Export"/>
         <div className="container">
-        <DownloadButton handleDownload={this.handleDownload} />
+        <DownloadButton handleDownload={this.handleDownload} selectedIndex={selectedIndex} />
         <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} type="strava"/>}

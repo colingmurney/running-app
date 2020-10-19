@@ -11,4 +11,16 @@ function handleSelectAll(selectAll, activities) {
     return activities
 }
 
-export default handleSelectAll;
+function fillOrEmptyIndex(selectAll, activities) {
+    const selectedIndex = []
+    if (!selectAll) {
+      for (let i=0; i< activities.length; i++) {
+        if (activities[i] !== undefined) {
+          selectedIndex.push(i);
+        }
+      }
+    }
+    return selectedIndex;
+}
+
+export {handleSelectAll, fillOrEmptyIndex};
