@@ -13,7 +13,7 @@ const filterBadData = require("../utils/filterBadData")
 function uploadActivity(access_token, activity_type, name, description, filename) {
   const data = new FormData();
 
-  data.append('file', fs.createReadStream(`./gpx/${filename}`))
+  data.append('file', fs.createReadStream(`./${filename}`))
 
   return axios({
     method: "post",
@@ -79,14 +79,14 @@ function uploadActivity(access_token, activity_type, name, description, filename
         const gpx = createGpx(waypoints)
 
         try {
-          await fsPromises.appendFile(`./gpx/${filename}`, gpx);        
+          await fsPromises.appendFile(`./${filename}`, gpx);        
         } catch(e) {console.log(e)}
         
         const result = await uploadActivity(req.body.access_token, type, name, description, filename)
         resultIds.push(result.id)
 
         try {
-            await fsPromises.unlink(`./gpx/${filename}`);  
+            await fsPromises.unlink(`./${filename}`);  
         } catch(e) {console.log(e)}
       }
 
