@@ -25,7 +25,7 @@ class Converter extends Component {
     uploadIds: [],
     step: sessionStorage.getItem("write_refresh_token") ? convertMsg() : sessionStorage.getItem("nikeActivities") ? authMsg() : tokenMsg(),
     selectAll: false,
-    returnLink: "http://localhost:3000/converter" //https://agile-savannah-82739.herokuapp.com/converter
+    returnLink: "https://agile-savannah-82739.herokuapp.com/converter" //http://localhost:3000/converter
   }
    
   async componentDidMount(){
