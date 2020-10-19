@@ -10,7 +10,7 @@ class NavBar extends Component {
           <h4 style={{color: "#FC4C02"}}className="my-0 mr-md-auto font-weight-normal">{this.props.step ? this.props.step : ""}</h4>
           <nav className="my-2 my-md-0 mr-md-3">
             <a className="p-2 text-dark"
-              href={`http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${this.state.returnURL}/exchange_token&approval_prompt=force&scope=activity:read_all`}>
+              href={`http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${this.state.returnLink}/exchange_token&approval_prompt=force&scope=activity:read_all`}>
                 Strava
             </a>
             <Link className="p-2 text-dark" to="/nike">Nike</Link>
