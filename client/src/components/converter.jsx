@@ -25,7 +25,7 @@ class Converter extends Component {
     uploadIds: [],
     step: sessionStorage.getItem("write_refresh_token") ? convertMsg() : sessionStorage.getItem("nikeActivities") ? authMsg() : tokenMsg(),
     selectAll: false,
-    returnLink: "https://agile-savannah-82739.herokuapp.com/converter"
+    returnLink: "https://agile-savannah-82739.herokuapp.com/converter" //http://localhost:3000/converter
   }
    
   async componentDidMount(){
@@ -117,18 +117,26 @@ class Converter extends Component {
       this.setState({selectAll, activities, selectedIndex})
     }
 
+    handleAuth = () => {
+      const authURL = `http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${this.state.returnLink}/exchange_token&approval_prompt=force&scope=activity:write`;
+      let a = document.createElement('a');
+      a.href = authURL
+      a.click()
+    }
+
   render() {
-    const {activities, selectedIndex, step, returnLink} = this.state;
+    const {activities, selectedIndex, step} = this.state;
+    //const authURL = `http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${returnLink}/exchange_token&approval_prompt=force&scope=activity:write`;
+
     return (
       <div>
         <NavBar step={step} title="Converter"/>
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit} />
-        <button className="btn btn-primary btn-sm mr-2 custom-width">
-          <a className="link" 
-            href={`http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${returnLink}/exchange_token&approval_prompt=force&scope=activity:write`}>
+        <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleAuth} disabled={step !== authMsg()}>
+          
               Authorize
-          </a>
+
         </button>
         <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleConvert} disabled={step !== convertMsg() || selectedIndex.length === 0}>Convert</button>
         <button className="btn btn-primary btn-sm mr-2 custom-width" onClick={this.handleStatus} disabled={step !== statusMsg()}>Status</button>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class OtherOptions extends Component {
-  state = {returnLink: "https://agile-savannah-82739.herokuapp.com/strava"};
+  state = {returnLink: "https://agile-savannah-82739.herokuapp.com/strava"}; //http://localhost:3000/strava
   render() {
     return (
       <div className="row">
