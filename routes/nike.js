@@ -12,7 +12,7 @@ router.post("/getActivities", jsonParser, async (req, res) => {
     let allActivities = [];
     
     do {
-      let {activities, paging} = await getNikeActivities(req.body.bearer, false, after_time);
+      let {activities, paging} = await getNikeActivities(req.body.bearer, true, after_time);
       for (let activity of activities) {
         if (filterBadData(activity)) {
           allActivities.push(activity)

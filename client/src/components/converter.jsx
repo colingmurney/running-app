@@ -120,8 +120,6 @@ class Converter extends Component {
 
   render() {
     const {activities, selectedIndex, step} = this.state;
-    //const authURL = `http://www.strava.com/oauth/authorize?client_id=47805&response_type=code&redirect_uri=${returnLink}/exchange_token&approval_prompt=force&scope=activity:write`;
-
     return (
       <div>
         <NavBar step={step} title="Converter"/>

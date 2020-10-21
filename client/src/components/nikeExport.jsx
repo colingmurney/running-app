@@ -47,13 +47,13 @@ class NikeExport extends Component {
   }
 
   render() {
-    const {activities} = this.state
+    const {activities, selectedIndex} = this.state
     return (
       <div>
         <NavBar title="Nike Export"/>
         <div className="container">
         <NikeForm handleSubmit={this.handleSubmit}/>
-        <DownloadButton handleDownload={this.handleDownload} />
+        <DownloadButton handleDownload={this.handleDownload} selectedIndex={selectedIndex} />
         <SelectAllButton activities={activities} handleSelectAll={this.handleSelectAll} />
         {activities && !!activities.length &&
         <Table activities={activities} handleSelect={this.handleSelect} type="nike"/>}

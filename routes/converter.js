@@ -30,6 +30,7 @@ function uploadActivity(access_token, activity_type, name, description, filename
 }
 
   router.post("/importActivities", jsonParser, async (req, res) => {
+    
     try {
       let after_time = 0
       let allActivities = [];
